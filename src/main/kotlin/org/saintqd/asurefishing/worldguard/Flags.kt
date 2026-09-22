@@ -1,4 +1,4 @@
-package org.saintqd.vineriumfishing.worldguard
+package org.saintqd.asurefishing.worldguard
 
 import com.sk89q.worldguard.WorldGuard
 import com.sk89q.worldguard.protection.flags.StringFlag

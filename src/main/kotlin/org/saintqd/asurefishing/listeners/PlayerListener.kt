@@ -1,4 +1,4 @@
-package org.saintqd.vineriumfishing.listeners
+package org.saintqd.asurefishing.listeners
 
 import com.sk89q.worldguard.WorldGuard
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin
@@ -18,13 +18,13 @@ import org.bukkit.event.player.PlayerFishEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
-import org.saintqd.vineriumfishing.VineriumFishing
-import org.saintqd.vineriumfishing.fishing.FishingTemplate
-import org.saintqd.vineriumfishing.managers.FishingManager
-import org.saintqd.vineriumfishing.utils.MMAbilityData
-import org.saintqd.vineriumfishing.worldguard.Flags
-import org.saintqd.vineriumlib.VineriumLib
-import org.saintqd.vineriumlib.utils.VinUtils
+import org.saintqd.asurefishing.AsureFishing
+import org.saintqd.asurefishing.fishing.FishingTemplate
+import org.saintqd.asurefishing.managers.FishingManager
+import org.saintqd.asurefishing.worldguard.Flags
+import org.saintqd.asurelib.AsureLib
+import org.saintqd.asurelib.utils.AsureUtils
+import org.saintqd.asurelib.utils.MMAbilityData
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 
@@ -40,7 +40,7 @@ class PlayerListener : Listener {
 
         event.clickedBlock?.let { _ ->
             if (event.action == org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK && event.player.gameMode != org.bukkit.GameMode.CREATIVE)
-                antiFishFarmTimers[event.player.uniqueId] = VinUtils.getCurrentTick() + 100
+                antiFishFarmTimers[event.player.uniqueId] = AsureUtils.getCurrentTick() + 100
         }
     }
 
@@ -49,7 +49,7 @@ class PlayerListener : Listener {
 
         if (event.state == PlayerFishEvent.State.CAUGHT_FISH) {
 
-            if (!VineriumFishing.inst().config.getBoolean("Enabled",true))
+            if (!AsureFishing.inst().config.getBoolean("Enabled",true))
                 return
 
             event.caught.let { caught ->
@@ -61,12 +61,12 @@ class PlayerListener : Listener {
                     else -> return
                 }
                 caught.itemStack = ItemStack.of(Material.AIR)
-                if (VineriumFishing.inst().config.getBoolean("AntiAfk.Enabled",true)) {
+                if (AsureFishing.inst().config.getBoolean("AntiAfk.Enabled",true)) {
                     val timer = antiFishFarmTimers.getOrDefault(event.player.uniqueId, 0L)
-                    if (timer > VinUtils.getCurrentTick() || event.player.isInsideVehicle) {
+                    if (timer > AsureUtils.getCurrentTick() || event.player.isInsideVehicle) {
                         event.player.sendMessage(
-                            VineriumLib.inst().langManager.parseLangString(
-                                VineriumFishing.inst(),
+                            AsureLib.inst().langManager.parseLangString(
+                                AsureFishing.inst(),
                                 "fishing_catch_fail"
                             )
                         )
@@ -82,8 +82,8 @@ class PlayerListener : Listener {
                                 val block = world.getBlockAt(x,centerY,z)
                                 if (block.type != Material.WATER) {
                                     event.player.sendMessage(
-                                        VineriumLib.inst().langManager.parseLangString(
-                                            VineriumFishing.inst(),
+                                        AsureLib.inst().langManager.parseLangString(
+                                            AsureFishing.inst(),
                                             "fishing_catch_fail"
                                         )
                                     )
@@ -99,14 +99,14 @@ class PlayerListener : Listener {
             val localPlayer = WorldGuardPlugin.inst().wrapPlayer(event.player)
             val regionSet = container.createQuery().getApplicableRegions(localPlayer.location)
             val dropTableName = regionSet.queryValue(localPlayer, Flags.FISHING_TEMPLATE)
-                ?: VineriumFishing.inst().config.getString("DefaultTemplate","default")
+                ?: AsureFishing.inst().config.getString("DefaultTemplate","default")
 
             val fishingTemplate = FishingManager.instance.fishingTemplates[dropTableName] ?: return
 
             // Поймать моба возможно только при активной рыбалке
             if ((event.state != PlayerFishEvent.State.BITE) && fishingTemplate.mob != null
                 && ThreadLocalRandom.current().nextDouble() < fishingTemplate.mob.second ) {
-                event.player.sendMessage(VineriumLib.inst().langManager.parseLangString(VineriumFishing.inst(), "fishing_catch_mob"))
+                event.player.sendMessage(AsureLib.inst().langManager.parseLangString(AsureFishing.inst(), "fishing_catch_mob"))
                 val mobName = fishingTemplate.mob.first
                 val mythicBukkit = MythicProvider.get() as MythicBukkit
                 val activeMob = mythicBukkit.mobManager.spawnMob(mobName, BukkitAdapter.adapt(event.hook.location),
@@ -125,23 +125,23 @@ class PlayerListener : Listener {
                     selectedBaitName = MythicProvider.get().itemManager.getMythicTypeFromItem(offHandItem)
                 }
             }
-            VinUtils.sendDebugMessage(3, "Looking for possible categories for selected bait $selectedBaitName.")
+            AsureUtils.sendDebugMessage(3, "Looking for possible categories for selected bait $selectedBaitName.")
 
             val possibleCategories = mutableListOf<FishingTemplate.FishingCategory>()
             for (category in fishingTemplate.categories) {
-                VinUtils.sendDebugMessage(4, "Checking category ${category.name}:")
+                AsureUtils.sendDebugMessage(4, "Checking category ${category.name}:")
                 var possible = false
                 if (category.baits.isNotEmpty()) {
-                    VinUtils.sendDebugMessage(4, "Category has bait requirement of ${category.baits} types.")
+                    AsureUtils.sendDebugMessage(4, "Category has bait requirement of ${category.baits} types.")
                     if (selectedBaitName != null) {
                         for (baitName in category.baits) {
                             if (selectedBaitName == baitName) {
-                                VinUtils.sendDebugMessage(4, "Required bait found.")
+                                AsureUtils.sendDebugMessage(4, "Required bait found.")
                                 possible = true
                             } else if (baitName.startsWith("$")) {
                                 val tagItems = FishingManager.instance.baitTags[baitName.substring(1)] ?: continue
                                 if (tagItems.contains(selectedBaitName)) {
-                                    VinUtils.sendDebugMessage(4, "Required bait found.")
+                                    AsureUtils.sendDebugMessage(4, "Required bait found.")
                                     possible = true
                                 }
                             }
@@ -151,7 +151,7 @@ class PlayerListener : Listener {
                 } else
                     possible = true
                 if (possible) {
-                    VinUtils.sendDebugMessage(4, "Category ${category.name} is possible.")
+                    AsureUtils.sendDebugMessage(4, "Category ${category.name} is possible.")
                     possibleCategories.add(category)
                 }
             }
@@ -169,7 +169,7 @@ class PlayerListener : Listener {
             }
 
             if (selectedCategory == null) {
-                event.player.sendMessage(VineriumLib.inst().langManager.parseLangString(VineriumFishing.inst(), "fishing_catch_fail"))
+                event.player.sendMessage(AsureLib.inst().langManager.parseLangString(AsureFishing.inst(), "fishing_catch_fail"))
                 return
             }
             val playerBiomeName = event.player.location.block.biome.key.key
@@ -194,7 +194,7 @@ class PlayerListener : Listener {
             }
 
             if (possibleFishList.isEmpty()) {
-                event.player.sendMessage(VineriumLib.inst().langManager.parseLangString(VineriumFishing.inst(), "fishing_catch_fail"))
+                event.player.sendMessage(AsureLib.inst().langManager.parseLangString(AsureFishing.inst(), "fishing_catch_fail"))
                 return
             }
             val selectedFish = possibleFishList.random()

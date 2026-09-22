@@ -1,12 +1,12 @@
-name: VineriumFishing
+name: AsureFishing
 version: '1.0'
 author: SaintQd
-main: org.saintqd.vineriumfishing.VineriumFishing
-api-version: 1.21.11
-description: VineriumFishing Plugin
+main: org.saintqd.asurefishing.AsureFishing
+api-version: '26.2'
+description: AsureFishing Plugin
 dependencies:
   server:
-    VineriumLib:
+    AsureLib:
       load: BEFORE
       required: true
     MythicMobs:

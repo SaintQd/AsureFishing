@@ -1,20 +1,20 @@
-package org.saintqd.vineriumfishing
+package org.saintqd.asurefishing
 
 import org.bukkit.plugin.java.JavaPlugin
-import org.saintqd.vineriumfishing.commands.VinFishingCommands
-import org.saintqd.vineriumfishing.listeners.PlayerListener
-import org.saintqd.vineriumfishing.managers.FishingManager
-import org.saintqd.vineriumfishing.worldguard.Flags
-import org.saintqd.vineriumlib.VineriumLib
-import org.saintqd.vineriumlib.utils.ResourceUtils
+import org.saintqd.asurefishing.commands.AsureFishingCommands
+import org.saintqd.asurefishing.listeners.PlayerListener
+import org.saintqd.asurefishing.managers.FishingManager
+import org.saintqd.asurefishing.worldguard.Flags
+import org.saintqd.asurelib.AsureLib
+import org.saintqd.asurelib.utils.ResourceUtils
 import java.io.File
 
-class VineriumFishing : JavaPlugin() {
+class AsureFishing : JavaPlugin() {
 
     companion object {
-        private var plugin : VineriumFishing? = null
+        private var plugin : AsureFishing? = null
 
-        fun inst() : VineriumFishing {
+        fun inst() : AsureFishing {
             return plugin!!
         }
     }
@@ -29,7 +29,7 @@ class VineriumFishing : JavaPlugin() {
 
         loadData()
 
-        VinFishingCommands.setupCommands(this)
+        AsureFishingCommands.setupCommands(this)
 
         server.pluginManager.registerEvents(PlayerListener(), this)
     }
@@ -38,11 +38,11 @@ class VineriumFishing : JavaPlugin() {
         reloadConfig()
 
         val selectedLang = getConfig().getString("Language")
-        val langLines = VineriumLib.inst().langManager.loadLanguageFile(
+        val langLines = AsureLib.inst().langManager.loadLanguageFile(
             this,
             dataFolder.path + File.separator + "lang" + File.separator + selectedLang + ".yml"
         )
-        VineriumLib.inst().langManager.registerLangLines(langLines)
+        AsureLib.inst().langManager.registerLangLines(langLines)
 
         var prevTime = System.currentTimeMillis()
         FishingManager.instance.loadParams(this)

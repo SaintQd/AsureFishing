@@ -1,10 +1,9 @@
-package org.saintqd.vineriumfishing.managers
+package org.saintqd.asurefishing.managers
 
 import io.lumine.mythic.api.MythicProvider
 import io.lumine.mythic.bukkit.BukkitAdapter
 import io.papermc.paper.registry.RegistryAccess
 import io.papermc.paper.registry.RegistryKey
-import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.Sound
 import org.bukkit.SoundCategory
@@ -14,10 +13,9 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.plugin.java.JavaPlugin
-import org.checkerframework.checker.units.qual.min
-import org.saintqd.vineriumfishing.VineriumFishing
-import org.saintqd.vineriumfishing.fishing.FishingTemplate
-import org.saintqd.vineriumlib.utils.VinUtils
+import org.saintqd.asurefishing.AsureFishing
+import org.saintqd.asurefishing.fishing.FishingTemplate
+import org.saintqd.asurelib.utils.AsureUtils
 import java.io.File
 import java.util.logging.Level
 
@@ -32,8 +30,8 @@ class FishingManager {
     companion object {
         val instance: FishingManager by lazy { FishingManager() }
 
-        val BAIT_KEY = NamespacedKey(VineriumFishing.inst(),"fishing_bait")
-        val SALVAGE_MATS_KEY = NamespacedKey(VineriumFishing.inst(),"salvage_mats")
+        val BAIT_KEY = NamespacedKey(AsureFishing.inst(),"fishing_bait")
+        val SALVAGE_MATS_KEY = NamespacedKey(AsureFishing.inst(),"salvage_mats")
     }
 
     fun loadParams(plugin : JavaPlugin) {
@@ -49,7 +47,7 @@ class FishingManager {
                 return
             }
         }
-        val filePaths = VinUtils.listFilesInFolder(plugin.dataFolder.path + File.separator + "FishingTemplates")
+        val filePaths = AsureUtils.listFilesInFolder(plugin.dataFolder.path + File.separator + "FishingTemplates")
 
         for (filePath in filePaths) {
             val file = filePath.toFile()

@@ -1,4 +1,4 @@
-package org.saintqd.vineriumfishing.fishing
+package org.saintqd.asurefishing.fishing
 
 import io.lumine.mythic.api.skills.Skill
 import io.lumine.mythic.bukkit.MythicBukkit

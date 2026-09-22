@@ -1,10 +1,10 @@
-name: VineriumFishing
+name: AsureFishing
 version: 1.0
 author: SaintQd
-main: org.saintqd.vineriumfishing.VineriumFishing
-api-version: 1.21.11
-depend: [VineriumLib, MythicMobs, WorldGuard]
+main: org.saintqd.asurefishing.AsureFishing
+api-version: 26.2
+depend: [AsureLib, MythicMobs, WorldGuard]
 permissions:
-  vineriumfishing.admin:
+  asurefishing.admin:
     description: Access to admin commands.
     default: op

@@ -17,11 +17,11 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
-    compileOnly(files("../VineriumLib/build/libs/VineriumLib-1.0-SNAPSHOT.jar"))
+    compileOnly("io.papermc.paper:paper-api:26.2+")
+    compileOnly(files("../AsureLib/build/libs/AsureLib-1.0-SNAPSHOT.jar"))
 
-    compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.16-SNAPSHOT")
-    compileOnly("io.lumine:Mythic-Dist:5.10.1-SNAPSHOT")
+    compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.19-SNAPSHOT")
+    compileOnly("io.lumine:Mythic-Dist:5.+")
 }
 
 tasks.withType<Jar> {
@@ -39,8 +39,12 @@ tasks.withType<Jar> {
 
 }
 
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of(25))
+}
+
 kotlin {
-    jvmToolchain(21)
+    jvmToolchain(25)
 }
 
 tasks.test {
